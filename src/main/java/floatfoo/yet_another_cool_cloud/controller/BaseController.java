@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.OffsetDateTime;
+
 @RestController
 public class BaseController {
     private BaseService baseService;
@@ -27,13 +29,18 @@ public class BaseController {
         return baseService.importItems(requestDto);
     }
 
-    /*@DeleteMapping("/delete/{id}")
-    public ResponseBody deleteItem() {
-
+    @DeleteMapping("/delete/{id}")
+    @ApiOperation("Удалить элемент по идентификатору. При удалении папки удаляются все дочерние элементы. Доступ к истории обновлений удаленного элемента невозможен.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Удаление прошло успешно"),
+            @ApiResponse(code = 400, message = "Невалидная схема документа или исходные данные не верны"),
+            @ApiResponse(code = 404, message = "Элемент не найден")
+    })
+    public ResponseEntity deleteItem(@PathVariable(value = "id") String id) {
+        return baseService.deleteItem(id);
     }
 
-    @GetMapping("/nodes/{id}")
+    /*@GetMapping("/nodes/{id}")
     public List<SystemItemDto> getItem() {
-
     }*/
 }
