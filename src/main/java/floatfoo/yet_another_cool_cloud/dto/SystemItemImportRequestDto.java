@@ -1,5 +1,7 @@
 package floatfoo.yet_another_cool_cloud.dto;
 
+import org.springframework.validation.annotation.Validated;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
