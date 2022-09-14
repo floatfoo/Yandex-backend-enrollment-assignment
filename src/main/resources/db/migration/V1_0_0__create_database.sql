@@ -18,10 +18,3 @@ create table file (
     size integer,
     url text
 ) inherits (system_item);
-
-create table folder_children (
-    parent_folder varchar(255) references folder(id),
-    child_folder varchar(255) references folder(id),
-    child_file varchar(255) references file(id),
-    PRIMARY KEY (parent_folder, child_folder, child_file)
-);
