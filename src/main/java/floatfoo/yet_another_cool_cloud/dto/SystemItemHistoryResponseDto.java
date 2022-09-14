@@ -5,10 +5,6 @@ import java.util.List;
 public class SystemItemHistoryResponseDto {
     private List<SystemItemHistoryUnitDto> items;
 
-    public SystemItemHistoryResponseDto(List<SystemItemHistoryUnitDto> items) {
-        this.items = items;
-    }
-
     public List<SystemItemHistoryUnitDto> getItems() {
         return items;
     }

@@ -15,6 +15,9 @@ public class SystemItemImportRequestDto {
         this.updateDate = updateDate;
     }
 
+    public SystemItemImportRequestDto() {
+    }
+
     public List<SystemItemImportDto> getItems() {
         return items;
     }

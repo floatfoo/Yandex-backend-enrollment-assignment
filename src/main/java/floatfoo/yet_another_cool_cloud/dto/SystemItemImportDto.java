@@ -11,6 +11,14 @@ public class SystemItemImportDto {
     private String type;
     private int size = 0;
 
+    public SystemItemImportDto(@NonNull String id, String url, String parentId, @NonNull String type, int size) {
+        this.id = id;
+        this.url = url;
+        this.parentId = parentId;
+        this.type = type;
+        this.size = size;
+    }
+
     public SystemItemImportDto(@NonNull String id, String url, String parentId, @NonNull String type) {
         this.id = id;
         this.url = url;
@@ -18,12 +26,7 @@ public class SystemItemImportDto {
         this.type = type;
     }
 
-    public SystemItemImportDto(@NonNull String id, String url, String parentId, @NonNull String type, int size) {
-        this.id = id;
-        this.url = url;
-        this.parentId = parentId;
-        this.type = type;
-        this.size = size;
+    public SystemItemImportDto() {
     }
 
     public String getUrl() {

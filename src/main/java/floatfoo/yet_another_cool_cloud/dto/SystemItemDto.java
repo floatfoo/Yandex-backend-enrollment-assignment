@@ -17,25 +17,6 @@ public class SystemItemDto {
     private String type;
     private int size;
 
-    public SystemItemDto(@NonNull String id, String url, @NonNull OffsetDateTime date, String parentId, @NonNull String type, int size, List<SystemItemDto> children) {
-        this.id = id;
-        this.url = url;
-        this.date = date;
-        this.parentId = parentId;
-        this.type = type;
-        this.size = size;
-        this.children = children;
-    }
-
-    public SystemItemDto(@NonNull String id, String url, @NonNull OffsetDateTime date, String parentId, @NonNull String type, int size) {
-        this.id = id;
-        this.url = url;
-        this.date = date;
-        this.parentId = parentId;
-        this.type = type;
-        this.size = size;
-    }
-
     private List<SystemItemDto> children;
 
     @NonNull

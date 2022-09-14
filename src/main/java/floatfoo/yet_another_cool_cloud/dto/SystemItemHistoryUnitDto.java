@@ -16,15 +16,6 @@ public class SystemItemHistoryUnitDto {
     @NonNull
     private OffsetDateTime date;
 
-    public SystemItemHistoryUnitDto(@NonNull String id, String url, String parentId, @NonNull String type, int size, @NonNull OffsetDateTime date) {
-        this.id = id;
-        this.url = url;
-        this.parentId = parentId;
-        this.type = type;
-        this.size = size;
-        this.date = date;
-    }
-
     @NonNull
     public String getId() {
         return id;
