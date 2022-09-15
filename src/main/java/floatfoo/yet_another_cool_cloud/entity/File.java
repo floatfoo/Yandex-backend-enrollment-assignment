@@ -4,18 +4,19 @@ import org.hibernate.annotations.Type;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "file")
-public class File extends SystemItem {
+public class File {
     @Id
     @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "date")
-    private OffsetDateTime date;
+    private Instant date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -35,11 +36,11 @@ public class File extends SystemItem {
         this.id = id;
     }
 
-    public OffsetDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(OffsetDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 
