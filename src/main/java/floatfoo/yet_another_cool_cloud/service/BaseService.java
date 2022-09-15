@@ -58,34 +58,40 @@ public class BaseService {
 
     // update dates
     public ResponseEntity<HttpStatus> deleteItem(@NotNull String id, Instant updateDate) {
-        if (fileRepository.findById(id).isPresent()) {
+        if (fileRepository.existsById(id)) {
+            Optional<File> maybeFile = fileRepository.findById(id);
+
+            if (maybeFile.isPresent()) updateDates(maybeFile.get().getId(), updateDate);
+            else return ResponseEntity.notFound().build();
+
             fileRepository.deleteById(id);
-        } else if (folderRepository.findById(id).isPresent()) {
+        } else if (folderRepository.existsById(id)) {
             List<File> childrenFiles = fileRepository.findByParent_IdEquals(id);
             fileRepository.deleteAll(childrenFiles);
             List<Folder> childrenFolders = folderRepository.findByParent_IdEquals(id);
             for (Folder folder: childrenFolders)
-                deleteItem(folder.getId());
+                deleteItem(folder.getId(), updateDate);
             folderRepository.deleteById(id);
         } else return ResponseEntity.notFound().build();
+
         return ResponseEntity.ok().build();
     }
 
-    public SystemItemDto getItem(String id) {
-        if (fileRepository.findById(id).isPresent()) {
+    public ResponseEntity<SystemItemDto> getItem(String id) {
+        if (fileRepository.existsById(id)) {
             File foundFile = fileRepository.findById(id).get();
-            return ObjectMapper.mapFromFile(foundFile);
+            return new ResponseEntity<>(ObjectMapper.mapFromFile(foundFile), HttpStatus.OK);
         } else if (folderRepository.findById(id).isPresent()) {
             SystemItemDto foundFolder = ObjectMapper.mapFromFolder(folderRepository.findById(id).get(), folderRepository, fileRepository);
             foundFolder.setChildren(new ArrayList<>());
             List<File> childrenFiles = fileRepository.findByParent_IdEquals(id);
             List<Folder> childrenFolders = folderRepository.findByParent_IdEquals(id);
             for (File file: childrenFiles)
-                foundFolder.getChildren().add(getItem(file.getId()));
+                foundFolder.getChildren().add(getItem(file.getId()).getBody());
             for (Folder folder: childrenFolders)
-                foundFolder.getChildren().add(getItem(folder.getId()));
-            return foundFolder;
-        } else return new SystemItemDto();
+                foundFolder.getChildren().add(getItem(folder.getId()).getBody());
+            return new ResponseEntity<>(foundFolder, HttpStatus.OK);
+        } else return ResponseEntity.notFound().build();
     }
 
     private static void updateDates(String id, Instant updateDate) {

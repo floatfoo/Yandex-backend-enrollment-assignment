@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 public class BaseController {
-    private BaseService baseService;
+    private final BaseService baseService;
 
     @Autowired
     public BaseController(BaseService baseService) {
@@ -34,14 +34,15 @@ public class BaseController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @ApiParam
     @ApiOperation("Удалить элемент по идентификатору. При удалении папки удаляются все дочерние элементы. Доступ к истории обновлений удаленного элемента невозможен.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Удаление прошло успешно"),
             @ApiResponse(code = 400, message = "Невалидная схема документа или исходные данные не верны"),
             @ApiResponse(code = 404, message = "Элемент не найден")
     })
-    public ResponseEntity<HttpStatus> deleteItem(@PathVariable(value = "id") String id, @PathParam(value = "date")Instant date) {
-        return baseService.deleteItem(id);
+    public ResponseEntity<HttpStatus> deleteItem(@PathVariable(value = "id") String id, @ApiParam(value = "Дата удаления элемента", required = true) @RequestParam(value = "date") Instant date) {
+        return baseService.deleteItem(id, date);
     }
 
     @GetMapping("/nodes/{id}")
@@ -51,7 +52,7 @@ public class BaseController {
             @ApiResponse(code = 400, message = "Невалидная схема документа или исходные данные не верны"),
             @ApiResponse(code = 404, message = "Элемент не найден")
     })
-    public SystemItemDto getItem(@PathVariable(value = "id") String id) {
+    public ResponseEntity<SystemItemDto> getItem(@PathVariable(value = "id") String id) {
         return baseService.getItem(id);
     }
 }
