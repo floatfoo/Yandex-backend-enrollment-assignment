@@ -2,6 +2,7 @@ package floatfoo.yet_another_cool_cloud.dto;
 
 import org.springframework.lang.NonNull;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class SystemItemDto {
     private String id;
     private String url;
     @NonNull
-    private OffsetDateTime date;
+    private Instant date;
     private String parentId;
     @NonNull
     private String type;
@@ -36,11 +37,11 @@ public class SystemItemDto {
     }
 
     @NonNull
-    public OffsetDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(@NonNull OffsetDateTime date) {
+    public void setDate(@NonNull Instant date) {
         this.date = date;
     }
 

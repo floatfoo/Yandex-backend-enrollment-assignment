@@ -6,17 +6,20 @@ import floatfoo.yet_another_cool_cloud.repository.FileRepository;
 import floatfoo.yet_another_cool_cloud.repository.FolderRepository;
 import org.springframework.lang.NonNull;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class ObjectMapper {
     @NonNull
-    public static File mapToFile(@NonNull SystemItemImportDto dto, @NonNull FolderRepository folderRepository) {
+    public static File mapToFile(@NonNull SystemItemImportDto dto, Instant updateDate, @NonNull FolderRepository folderRepository) {
         File file = new File();
         file.setId(dto.getId());
-        file.setDate(OffsetDateTime.now());
+        file.setDate(updateDate);
         file.setSize(dto.getSize());
         file.setUrl(dto.getUrl());
         Optional<Folder> parent = folderRepository.findById(dto.getParentId());
@@ -25,10 +28,10 @@ public class ObjectMapper {
     }
 
     @NonNull
-    public static Folder mapToFolder(@NonNull SystemItemImportDto dto, @NonNull FolderRepository folderRepository) {
+    public static Folder mapToFolder(@NonNull SystemItemImportDto dto, Instant updateDate, @NonNull FolderRepository folderRepository) {
         Folder folder = new Folder();
         folder.setId(dto.getId());
-        folder.setDate(OffsetDateTime.now());
+        folder.setDate(updateDate);
         if (dto.getParentId() != null) {
             Optional<Folder> parent = folderRepository.findById(dto.getParentId());
             parent.ifPresent(folder::setParent);
@@ -43,7 +46,7 @@ public class ObjectMapper {
         systemItemDto.setUrl(file.getUrl());
         systemItemDto.setSize(file.getSize());
         systemItemDto.setType("FILE");
-        systemItemDto.setDate(OffsetDateTime.now());
+        systemItemDto.setDate(file.getDate());
         if (file.getParent() != null) systemItemDto.setParentId(file.getParent().getId());
         systemItemDto.setChildren(null);
         return systemItemDto;
@@ -54,7 +57,7 @@ public class ObjectMapper {
         SystemItemDto systemItemDto = new SystemItemDto();
         systemItemDto.setId(folder.getId());
         systemItemDto.setType("FOLDER");
-        systemItemDto.setDate(OffsetDateTime.now());
+        systemItemDto.setDate(folder.getDate());
         if (folder.getParent() != null) systemItemDto.setParentId(folder.getParent().getId());
 
         systemItemDto.setChildren(new ArrayList<>());

@@ -1,18 +1,19 @@
 package floatfoo.yet_another_cool_cloud.entity;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "folder")
-public class Folder extends SystemItem {
+public class Folder {
     @Id
     @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "date")
-    private OffsetDateTime date;
+    private Instant date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -26,11 +27,11 @@ public class Folder extends SystemItem {
         this.id = id;
     }
 
-    public OffsetDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(OffsetDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

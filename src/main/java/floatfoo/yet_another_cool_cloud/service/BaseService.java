@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,8 +24,8 @@ import java.util.concurrent.Executors;
 @Service
 public class BaseService {
 
-    private final FolderRepository folderRepository;
-    private final FileRepository fileRepository;
+    private static FolderRepository folderRepository;
+    private static FileRepository fileRepository;
 
     @Autowired
     public BaseService(FolderRepository folderRepository, FileRepository fileRepository) {
@@ -42,18 +44,19 @@ public class BaseService {
 
         for (SystemItemImportDto item: requestDto.getItems()) {
             if (item.getType().equals("FILE")) {
-                File newFile = ObjectMapper.mapToFile(item, folderRepository);
-                newFile.setDate(requestDto.getUpdateDate());
+                File newFile = ObjectMapper.mapToFile(item, requestDto.getUpdateDate(), folderRepository);
                 fileRepository.save(newFile);
             } else if (item.getType().equals("FOLDER")) {
-                Folder newFolder = ObjectMapper.mapToFolder(item, folderRepository);
+                Folder newFolder = ObjectMapper.mapToFolder(item, requestDto.getUpdateDate(), folderRepository);
                 newFolder.setDate(requestDto.getUpdateDate());
                 folderRepository.save(newFolder);
             } else return ResponseEntity.badRequest().build();
+            if (item.getParentId() != null) updateDates(item.getParentId(), requestDto.getUpdateDate());
         }
         return ResponseEntity.ok().build();
     }
 
+    // update dates
     public ResponseEntity<HttpStatus> deleteItem(@NotNull String id) {
         if (fileRepository.findById(id).isPresent()) {
             fileRepository.deleteById(id);
@@ -83,5 +86,15 @@ public class BaseService {
                 foundFolder.getChildren().add(getItem(folder.getId()));
             return foundFolder;
         } else return new SystemItemDto();
+    }
+
+    private static void updateDates(String id, Instant updateDate) {
+        Optional<Folder> maybeParent = folderRepository.findById(id);
+        if (maybeParent.isEmpty()) return;
+        Folder parent = maybeParent.get();
+        parent.setDate(updateDate);
+        folderRepository.save(parent);
+        if (parent.getParent() == null) return;
+        updateDates(parent.getParent().getId(), updateDate);
     }
 }

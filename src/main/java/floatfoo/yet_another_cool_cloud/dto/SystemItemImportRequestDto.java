@@ -2,15 +2,16 @@ package floatfoo.yet_another_cool_cloud.dto;
 
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 public class SystemItemImportRequestDto {
     private List<SystemItemImportDto> items;
 
-    private OffsetDateTime updateDate;
+    private Instant updateDate;
 
-    public SystemItemImportRequestDto(List<SystemItemImportDto> items, OffsetDateTime updateDate) {
+    public SystemItemImportRequestDto(List<SystemItemImportDto> items, Instant updateDate) {
         this.items = items;
         this.updateDate = updateDate;
     }
@@ -26,11 +27,11 @@ public class SystemItemImportRequestDto {
         this.items = items;
     }
 
-    public OffsetDateTime getUpdateDate() {
+    public Instant getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(OffsetDateTime updateDate) {
+    public void setUpdateDate(Instant updateDate) {
         this.updateDate = updateDate;
     }
 }

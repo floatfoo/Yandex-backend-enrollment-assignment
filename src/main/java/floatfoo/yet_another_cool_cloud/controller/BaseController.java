@@ -5,10 +5,13 @@ import floatfoo.yet_another_cool_cloud.dto.SystemItemImportRequestDto;
 import floatfoo.yet_another_cool_cloud.service.BaseService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -26,7 +29,7 @@ public class BaseController {
             @ApiResponse(code = 200, message = "Вставка или обновление прошли усешно!"),
             @ApiResponse(code = 400, message = "Невалидная схема документа или входные данные не верны")
     })
-    public ResponseEntity importItems(@RequestBody @NonNull SystemItemImportRequestDto requestDto) {
+    public ResponseEntity<HttpStatus> importItems(@RequestBody @NonNull SystemItemImportRequestDto requestDto) {
         return baseService.importItems(requestDto);
     }
 
@@ -37,7 +40,7 @@ public class BaseController {
             @ApiResponse(code = 400, message = "Невалидная схема документа или исходные данные не верны"),
             @ApiResponse(code = 404, message = "Элемент не найден")
     })
-    public ResponseEntity deleteItem(@PathVariable(value = "id") String id) {
+    public ResponseEntity<HttpStatus> deleteItem(@PathVariable(value = "id") String id, @PathParam(value = "date")Instant date) {
         return baseService.deleteItem(id);
     }
 
