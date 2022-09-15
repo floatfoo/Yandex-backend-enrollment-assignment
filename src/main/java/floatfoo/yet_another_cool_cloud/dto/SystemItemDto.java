@@ -1,6 +1,5 @@
 package floatfoo.yet_another_cool_cloud.dto;
 
-import floatfoo.yet_another_cool_cloud.entity.File;
 import org.springframework.lang.NonNull;
 
 import java.time.OffsetDateTime;

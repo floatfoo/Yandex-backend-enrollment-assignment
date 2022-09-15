@@ -1,5 +1,6 @@
 package floatfoo.yet_another_cool_cloud.controller;
 
+import floatfoo.yet_another_cool_cloud.dto.SystemItemDto;
 import floatfoo.yet_another_cool_cloud.dto.SystemItemImportRequestDto;
 import floatfoo.yet_another_cool_cloud.service.BaseService;
 import io.swagger.annotations.*;
@@ -8,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.OffsetDateTime;
+import java.util.List;
 
 @RestController
 public class BaseController {
@@ -40,7 +41,14 @@ public class BaseController {
         return baseService.deleteItem(id);
     }
 
-    /*@GetMapping("/nodes/{id}")
-    public List<SystemItemDto> getItem() {
-    }*/
+    @GetMapping("/nodes/{id}")
+    @ApiOperation("Получает информацию об элементе по идентификатору")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Информация об элементе"),
+            @ApiResponse(code = 400, message = "Невалидная схема документа или исходные данные не верны"),
+            @ApiResponse(code = 404, message = "Элемент не найден")
+    })
+    public SystemItemDto getItem(@PathVariable(value = "id") String id) {
+        return baseService.getItem(id);
+    }
 }

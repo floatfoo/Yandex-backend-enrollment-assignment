@@ -4,7 +4,7 @@ create type system_item_type as enum (
     );
 
 create table system_item (
-    date timestamptz default current_timestamp
+    date timestamp default current_timestamp
     );
 
 create table folder (
