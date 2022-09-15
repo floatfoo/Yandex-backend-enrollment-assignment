@@ -29,8 +29,8 @@ public class BaseService {
 
     @Autowired
     public BaseService(FolderRepository folderRepository, FileRepository fileRepository) {
-        this.folderRepository = folderRepository;
-        this.fileRepository = fileRepository;
+        BaseService.folderRepository = folderRepository;
+        BaseService.fileRepository = fileRepository;
     }
 
     public ResponseEntity<HttpStatus> importItems(@NonNull SystemItemImportRequestDto requestDto) {
@@ -57,7 +57,7 @@ public class BaseService {
     }
 
     // update dates
-    public ResponseEntity<HttpStatus> deleteItem(@NotNull String id) {
+    public ResponseEntity<HttpStatus> deleteItem(@NotNull String id, Instant updateDate) {
         if (fileRepository.findById(id).isPresent()) {
             fileRepository.deleteById(id);
         } else if (folderRepository.findById(id).isPresent()) {
